@@ -21,12 +21,12 @@ class SearchViewModel @Inject constructor(private val lastFmRepo: ILastFmRepo): 
     private var searchPageNum = 1
     private var search = ""
 
-    fun searchByArtist(search:String) {
+    fun searchForArtist(search:String) {
 
         if (search != "") {
             this.search = search
             launch(CommonPool) {
-                val response = lastFmRepo.searchByArtist(search)
+                val response = lastFmRepo.searchForArtist(search)
                 with (response?.data?.results!!) {
                     totalSearchResults = totalResults
                     searchItemsPerPage = itemsPerPage
@@ -49,7 +49,7 @@ class SearchViewModel @Inject constructor(private val lastFmRepo: ILastFmRepo): 
         if (searchItemsPerPage * searchPageNum < totalSearchResults) {
 
             launch(CommonPool) {
-                val response = lastFmRepo.searchByArtist(search, ++searchPageNum)
+                val response = lastFmRepo.searchForArtist(search, ++searchPageNum)
                 newArtists.postValue(response)
             }
         }else {

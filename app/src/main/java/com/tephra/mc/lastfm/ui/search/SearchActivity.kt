@@ -69,7 +69,7 @@ class SearchActivity : BaseActivity() {
 
     fun onSearchBtnClicked(v:View) {
         progress_bar.visibility = View.VISIBLE
-        searchViewModel.searchByArtist(et_search.text.toString())
+        searchViewModel.searchForArtist(et_search.text.toString())
     }
 
     private fun updateUI(resource: Resource<SearchResults>) {
