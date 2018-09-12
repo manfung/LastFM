@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.tephra.mc.lastfm.extension.loadFromUrl
 import com.tephra.mc.lastfm.R
 import com.tephra.mc.lastfm.data.model.Artist
 import com.tephra.mc.lastfm.ui.search.ISearchItemOnClickListener
@@ -17,14 +16,13 @@ class SearchListAdapter(private val articles: List<Artist>,
 
     class SearchListItemViewHolder(view: View, private val searchItemOnClickListener: ISearchItemOnClickListener) : RecyclerView.ViewHolder(view) {
 
-        fun bind(artist: Artist, position: Int) {
+        fun bind(artist: Artist) {
             with(itemView) {
                 tv_name.text = artist.name
                 loadImage(artist)
 
-//                tv_subtitle.text = article.subtitle
-//                tv_date.text = SimpleDateFormat(APP_DATE_FORMAT).format(article.date).toString()
-//                setOnClickListener { searchItemOnClickListener.onClick(tv_title, article.id) }
+
+                setOnClickListener { searchItemOnClickListener.onClick(iv_image, artist.mbid, getLargeImageUrl(artist)) }
 //                tv_title.transitionName = context.getString(R.string.view_transition) + position
             }
 
@@ -33,17 +31,17 @@ class SearchListAdapter(private val articles: List<Artist>,
         private fun loadImage(artist: Artist) {
 
             artist?.images?.get(0)?.imageUrl.let {
+                itemView.iv_image.loadFromUrl(it)
 
-                Glide.with(itemView.context)
-                        .load(it)
-                        .apply(RequestOptions()
-                                //.placeholder(R.mipmap.ic_loading_image)
-                            .centerCrop()
-
-                        )
-                        .into(itemView.iv_image)
             }
+        }
 
+        private fun getLargeImageUrl(artist: Artist): String {
+
+            artist?.images?.get(2)?.imageUrl.let {
+                return it
+            }
+            return ""
         }
     }
 
@@ -58,7 +56,7 @@ class SearchListAdapter(private val articles: List<Artist>,
 
     override fun onBindViewHolder(holder: SearchListItemViewHolder, position: Int) {
         val article = articles[position]
-        holder.bind(article, position)
+        holder.bind(article)
     }
 
     override fun getItemCount() = articles.size

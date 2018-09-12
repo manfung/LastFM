@@ -7,5 +7,6 @@ data class Artist (val name: String,
               val mbid: String,
               val url: String,
               val streamable: String,
-              @SerializedName("image") val images: List<Image>
+              @SerializedName("image") val images: List<Image>,
+              val bio: Bio
               )

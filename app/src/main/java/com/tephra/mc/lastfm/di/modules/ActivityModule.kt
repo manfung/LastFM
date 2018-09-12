@@ -1,5 +1,6 @@
 package com.tephra.mc.lastfm.di.modules
 
+import com.tephra.mc.lastfm.ui.artist.ArtistActivity
 import com.tephra.mc.lastfm.ui.search.SearchActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -9,5 +10,8 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector
     abstract fun provideSearchActivity(): SearchActivity
+
+    @ContributesAndroidInjector
+    abstract fun provideArtistActivity(): ArtistActivity
 
 }

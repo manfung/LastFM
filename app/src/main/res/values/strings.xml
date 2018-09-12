@@ -1,5 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">LastFM</string>
-    <string name="view_transition">view transition</string>
+    <string name="view_transition" tools:ignore="ExtraTranslation">view transition</string>
     <string name="error">Error</string>
 </resources>

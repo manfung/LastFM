@@ -1,3 +1,4 @@
 <resources>
-    <string name="search_hint">Search Artist</string>
+    <string name="search_hint">Artist</string>
+    <string name="btn_text">Search</string>
 </resources>

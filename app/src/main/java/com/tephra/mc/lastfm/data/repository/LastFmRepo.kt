@@ -1,5 +1,6 @@
 package com.tephra.mc.latestnews.data.repository
 
+import com.tephra.mc.lastfm.data.model.ArtistResult
 import com.tephra.mc.lastfm.data.model.SearchResults
 import com.tephra.mc.lastfm.data.repository.ILastFmRepo
 import com.tephra.mc.lastfm.data.repository.Resource
@@ -9,7 +10,7 @@ class LastFmRepo @Inject constructor(private val apiService: ApiService): ILastF
 
     override suspend fun searchByArtist(artist: String): Resource<SearchResults> {
         return try {
-            val response = apiService.searchByArtist(artist = artist)
+            val response = apiService.searchForArtist(artist = artist)
             val result = response.await()
             Resource.success(result)
         } catch (e: Throwable) {
@@ -17,5 +18,14 @@ class LastFmRepo @Inject constructor(private val apiService: ApiService): ILastF
         }
     }
 
+    override suspend fun getArtist(id: String): Resource<ArtistResult> {
+        return try {
+            val response = apiService.getArtist(id = id)
+            val result = response.await()
+            Resource.success(result)
+        } catch (e: Throwable) {
+            Resource.error(e.message!!, data = null)
+        }
+    }
 
 }

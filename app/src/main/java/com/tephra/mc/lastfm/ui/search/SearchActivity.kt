@@ -1,9 +1,10 @@
 package com.tephra.mc.lastfm.ui.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import android.widget.Toast
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import app.news.mc.com.newsapp.ui.adapter.SearchListAdapter
 import com.tephra.mc.lastfm.R
 import com.tephra.mc.lastfm.data.model.Artist
-import com.tephra.mc.lastfm.data.model.ArtistSearchResults
 import com.tephra.mc.lastfm.data.model.SearchResults
 import com.tephra.mc.lastfm.data.repository.Resource
 import com.tephra.mc.lastfm.data.repository.Status
+import com.tephra.mc.lastfm.shared.Constants.Companion.INTENT_ID_KEY
+import com.tephra.mc.lastfm.shared.Constants.Companion.INTENT_IMAGE_URL_KEY
+import com.tephra.mc.lastfm.ui.artist.ArtistActivity
 import com.tephra.mc.lastfm.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_search.*
 
@@ -30,8 +33,8 @@ class SearchActivity : BaseActivity() {
     private var layoutManagerSavedState: Parcelable? = null
 
     private var onSearchItemClickListener : ISearchItemOnClickListener = object : ISearchItemOnClickListener {
-        override fun onClick(v: View, id: Int) {
-            gotoArtist(v, id)
+        override fun onClick(v: View, id: String, imageUrl: String) {
+            navigateToArtist(v, id, imageUrl)
             layoutManagerSavedState = layoutManager.onSaveInstanceState()
         }
     }
@@ -85,10 +88,6 @@ class SearchActivity : BaseActivity() {
         }
     }
 
-    private fun showError() {
-        Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show()
-    }
-
     private fun updateList(articles: List<Artist>) {
         listView.adapter = SearchListAdapter(articles, onSearchItemClickListener)
         restoreLayoutManagerPosition()
@@ -109,6 +108,15 @@ class SearchActivity : BaseActivity() {
         if (layoutManagerSavedState != null) {
             layoutManager.onRestoreInstanceState(layoutManagerSavedState)
         }
+    }
+
+    private fun navigateToArtist(v: View, id: String, imageUrl:String) {
+        val intent = Intent(this, ArtistActivity::class.java)
+        intent.putExtra(INTENT_ID_KEY, id)
+        intent.putExtra(INTENT_IMAGE_URL_KEY, imageUrl)
+
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, v, getString(R.string.view_transition))
+        startActivity(intent, options.toBundle())
     }
 
 }
