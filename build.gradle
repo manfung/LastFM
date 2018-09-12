@@ -1,0 +1,59 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        kotlin_version = '1.2.60'
+        constraint_layout_version = '1.1.2'
+        lifecycle_version = '2.0.0-alpha1'
+        junit_version = '4.12'
+        retrofit_version = '2.4.0'
+        dagger_version = '2.16'
+        supported_android_version = '1.0.0-rc01'
+        coroutines_adapter_version = '1.0.0'
+        logging_interceptor_version = '3.9.1'
+        runner_version = '1.1.0-alpha3'
+        espresso_version = '3.1.0-alpha3'
+        mockito_version = "2.21.0"
+        mockitokotlin2_version = "2.0.0-RC1"
+        glide_version = "4.7.1"
+    }
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha08'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+
+    ext.getSecretProperty = { key, defaultValue ->
+        def value = System.getenv(key)
+
+        if (value == null) {
+            Properties properties = new Properties()
+            if (project.rootProject.file('local.properties').exists()) {
+                properties.load(project.rootProject.file('local.properties').newDataInputStream())
+                value = properties.getProperty(key)
+            }
+        }
+
+        if (value == null) {
+            value = defaultValue
+        }
+
+        return value
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
