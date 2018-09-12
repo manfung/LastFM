@@ -27,18 +27,16 @@ class SearchListAdapter(private var articles: MutableList<Artist>,
 
         private fun loadImage(artist: Artist) {
 
-            artist?.images?.get(0)?.imageUrl.let {
+            artist.images[0].imageUrl.let {
                 itemView.iv_image.loadFromUrl(it)
-
             }
         }
 
         private fun getLargeImageUrl(artist: Artist): String {
 
-            artist?.images?.get(2)?.imageUrl.let {
+            artist.images[2].imageUrl.let {
                 return it
             }
-            return ""
         }
     }
 

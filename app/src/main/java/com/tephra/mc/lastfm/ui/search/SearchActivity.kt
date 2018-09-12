@@ -80,7 +80,7 @@ class SearchActivity : BaseActivity() {
             Status.SUCCESS -> {
 
                 resource.data?.results?.artistmatches?.let {
-                    updateListWithInitialResults(resource.data!!.results!!.artistmatches.artist)
+                    updateListWithInitialResults(resource.data.results.artistmatches.artist)
                 }?: run {
                     showError()
                 }
@@ -136,7 +136,7 @@ class SearchActivity : BaseActivity() {
                 resource.data?.results?.artistmatches?.let {
                     // get the current list size before its updated
                     val size = searchListAdapter.itemCount
-                    searchListAdapter.addItems(resource.data!!.results!!.artistmatches.artist)
+                    searchListAdapter.addItems(resource.data.results.artistmatches.artist)
                     // only notify changes from the last position
                     searchListAdapter.notifyItemChanged(size)
                 }?: run {

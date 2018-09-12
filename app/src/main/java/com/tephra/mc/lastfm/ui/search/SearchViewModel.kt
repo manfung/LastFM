@@ -27,7 +27,7 @@ class SearchViewModel @Inject constructor(private val lastFmRepo: ILastFmRepo): 
             this.search = search
             launch(CommonPool) {
                 val response = lastFmRepo.searchForArtist(search)
-                with (response?.data?.results!!) {
+                with (response.data?.results!!) {
                     totalSearchResults = totalResults
                     searchItemsPerPage = itemsPerPage
                     searchPageNum = startIndex + 1
