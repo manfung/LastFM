@@ -10,4 +10,4 @@ data class ArtistSearchResults(val artistmatches: Artists,
                                @SerializedName("opensearch:startIndex") val startIndex: Int = 0
                                )
 
-data class Artists(val artist: List<Artist>)
+data class Artists(var artist: List<Artist>)

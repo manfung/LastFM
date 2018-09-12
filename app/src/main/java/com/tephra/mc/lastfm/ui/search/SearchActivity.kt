@@ -31,6 +31,7 @@ class SearchActivity : BaseActivity() {
     private lateinit var listView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private var layoutManagerSavedState: Parcelable? = null
+    private lateinit var searchListAdapter: SearchListAdapter
 
     private var onSearchItemClickListener : ISearchItemOnClickListener = object : ISearchItemOnClickListener {
         override fun onClick(v: View, id: String, imageUrl: String) {
@@ -50,9 +51,12 @@ class SearchActivity : BaseActivity() {
 
         searchViewModel = ViewModelProviders.of(this, viewModelFactory)[SearchViewModel::class.java]
 
-        searchViewModel.artists.observe(this, Observer<Resource<SearchResults>> {
+        searchViewModel.initialArtists.observe(this, Observer<Resource<SearchResults>> {
             updateUI(it!!)
+        })
 
+        searchViewModel.newArtists.observe(this, Observer<Resource<SearchResults>> {
+            appendNextResultsToList(it!!)
         })
     }
 
@@ -64,10 +68,8 @@ class SearchActivity : BaseActivity() {
     }
 
     fun onSearchBtnClicked(v:View) {
-
         progress_bar.visibility = View.VISIBLE
-        // TODO take from edittext and check "" in vm
-        searchViewModel.searchByArtist("test")
+        searchViewModel.searchByArtist(et_search.text.toString())
     }
 
     private fun updateUI(resource: Resource<SearchResults>) {
@@ -78,18 +80,20 @@ class SearchActivity : BaseActivity() {
             Status.SUCCESS -> {
 
                 resource.data?.results?.artistmatches?.let {
-                    updateList(resource.data!!.results!!.artistmatches.artist)
+                    updateListWithInitialResults(resource.data!!.results!!.artistmatches.artist)
                 }?: run {
                     showError()
                 }
             }
 
-            Status.ERROR -> showError()
+            Status.ERROR -> showError(resource.message!!)
         }
     }
 
-    private fun updateList(articles: List<Artist>) {
-        listView.adapter = SearchListAdapter(articles, onSearchItemClickListener)
+    private fun updateListWithInitialResults(articles: List<Artist>) {
+        btn_next.visibility = View.VISIBLE
+        searchListAdapter = SearchListAdapter(articles as MutableList<Artist>, onSearchItemClickListener)
+        listView.adapter = searchListAdapter //SearchListAdapter(articles as MutableList<Artist>, onSearchItemClickListener)
         restoreLayoutManagerPosition()
     }
 
@@ -119,4 +123,29 @@ class SearchActivity : BaseActivity() {
         startActivity(intent, options.toBundle())
     }
 
+    fun onNextBtnClicked(v: View) {
+        progress_bar.visibility = View.VISIBLE
+        searchViewModel.getNextPage()
+    }
+
+    private fun appendNextResultsToList(resource: Resource<SearchResults>) {
+        progress_bar.visibility = View.GONE
+        when (resource.status) {
+
+            Status.SUCCESS -> {
+                resource.data?.results?.artistmatches?.let {
+                    // get the current list size before its updated
+                    val size = searchListAdapter.itemCount
+                    searchListAdapter.addItems(resource.data!!.results!!.artistmatches.artist)
+                    // only notify changes from the last position
+                    searchListAdapter.notifyItemChanged(size)
+                }?: run {
+                    // null object found
+                    showError(getString(R.string.err_text_no_more_results))
+                }
+            }
+
+            Status.ERROR -> showError(resource.message!!)
+        }
+    }
 }

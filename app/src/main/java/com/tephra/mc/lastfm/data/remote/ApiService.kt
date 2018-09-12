@@ -15,7 +15,7 @@ interface ApiService {
                         @Query("method") method:String = "artist.search",
                         @Query("format") format: String = "json",
                         @Query("artist") artist: String,
-                        @Query("page") page: String = "1")
+                        @Query("page") page: Int = 1)
             : Deferred<SearchResults>
 
 

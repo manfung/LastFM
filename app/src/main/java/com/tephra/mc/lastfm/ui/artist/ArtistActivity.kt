@@ -15,6 +15,8 @@ import com.tephra.mc.lastfm.shared.Constants.Companion.INTENT_ID_KEY
 import com.tephra.mc.lastfm.shared.Constants.Companion.INTENT_IMAGE_URL_KEY
 import com.tephra.mc.lastfm.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_artist.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 
 class ArtistActivity : BaseActivity() {
 
@@ -64,7 +66,7 @@ class ArtistActivity : BaseActivity() {
             Status.SUCCESS -> {
                 updateUI(resource.data!!.artist)
             }
-            Status.ERROR -> showError()
+            Status.ERROR -> showError(resource.message!!)
         }
         progress_bar.visibility = View.GONE
     }
@@ -76,6 +78,8 @@ class ArtistActivity : BaseActivity() {
             tv_name.text = name
             tv_summary.htmlText(bio.summary)
             tv_content.htmlText((bio.content))
+
+
         }
     }
 

@@ -5,7 +5,7 @@ import com.tephra.mc.lastfm.data.model.SearchResults
 
 interface ILastFmRepo {
 
-    suspend fun searchByArtist(artist: String): Resource<SearchResults>
+    suspend fun searchByArtist(artist: String, page: Int = 1): Resource<SearchResults>
 
     suspend fun getArtist(id: String): Resource<ArtistResult>
 

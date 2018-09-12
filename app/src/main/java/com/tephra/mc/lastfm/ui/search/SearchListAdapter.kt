@@ -10,7 +10,7 @@ import com.tephra.mc.lastfm.data.model.Artist
 import com.tephra.mc.lastfm.ui.search.ISearchItemOnClickListener
 import kotlinx.android.synthetic.main.search_list_item.view.*
 
-class SearchListAdapter(private val articles: List<Artist>,
+class SearchListAdapter(private var articles: MutableList<Artist>,
                         private val searchItemOnClickListener: ISearchItemOnClickListener) :
         RecyclerView.Adapter<SearchListAdapter.SearchListItemViewHolder>() {
 
@@ -20,10 +20,7 @@ class SearchListAdapter(private val articles: List<Artist>,
             with(itemView) {
                 tv_name.text = artist.name
                 loadImage(artist)
-
-
                 setOnClickListener { searchItemOnClickListener.onClick(iv_image, artist.mbid, getLargeImageUrl(artist)) }
-//                tv_title.transitionName = context.getString(R.string.view_transition) + position
             }
 
         }
@@ -60,5 +57,9 @@ class SearchListAdapter(private val articles: List<Artist>,
     }
 
     override fun getItemCount() = articles.size
+
+    fun addItems(newArticles: List<Artist>) {
+        articles.addAll(newArticles)
+    }
 
 }

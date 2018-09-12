@@ -18,7 +18,7 @@ abstract class BaseActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    protected fun showError() {
-        Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show()
+    protected fun showError(msg: String = getString(R.string.error)) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }
